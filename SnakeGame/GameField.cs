@@ -9,11 +9,51 @@ public class GameField
     private char[,] space;
 
     private Snake snake;
-    private Food food;
 
     public void Init()
     {
         space = new char[22, 22];
+        SpaceReset();
+
+        snake = new Snake();
+        var foodPos = snake.GetFoodPos();
+        space[foodPos.Item2, foodPos.Item1] = '*';
+    }
+
+    public void Update()
+    {
+        snake.Update();
+
+        if (SnakeGame.isGameOver)
+            return;
+
+        SpaceReset();
+        List<(int, int)> snakePos = snake.GetPos();
+        foreach (var pos in snakePos)
+        {
+            space[pos.Item2, pos.Item1] = '0';
+        }
+
+        var foodPos = snake.GetFoodPos();
+        space[foodPos.Item2, foodPos.Item1] = '*';
+    }
+
+    public void Draw()
+    {
+        for (int i = 0; i < 22; i++)
+        {
+            for (int j = 0; j < 22; j++)
+            {
+                Console.Write(space[i, j]);
+            }
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"점수: {SnakeGame.score}");
+    }
+
+    public void SpaceReset()
+    {
         for (int i = 0; i < 22; i++)
         {
             if (i == 0 || i == 21)
@@ -31,40 +71,5 @@ public class GameField
                 space[i, 21] = '|';
             }
         }
-
-        snake = new Snake();
-        food = new Food();
-    }
-
-    public void Update()
-    {
-        snake.Update();
-
-        if (SnakeGame.isGameOver)
-            return;
-
-        List<(int, int)> snakePos = snake.GetPos();
-        foreach (var pos in snakePos)
-        {
-            if (space[pos.Item1, pos.Item2] == ' ')
-            {
-                space[pos.Item1, pos.Item2] = '0';
-            }
-            else if(space[pos.Item1, pos.Item2] == ' ')
-        }
-    }
-
-    public void Draw()
-    {
-        for (int i = 0; i < 22; i++)
-        {
-            for (int j = 0; j < 22; j++)
-            {
-                Console.Write(space[i, j]);
-            }
-            Console.WriteLine();
-        }
-
-        Console.WriteLine($"점수: {SnakeGame.score}");
     }
 }

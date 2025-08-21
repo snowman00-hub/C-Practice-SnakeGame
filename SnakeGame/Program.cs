@@ -49,14 +49,14 @@ class SnakeGame
         GameField gameField = new GameField();
 
         gameField.Init();
+        gameField.Draw();
+        System.Threading.Thread.Sleep(200);
         while (!isGameOver)
         {
             gameField.Update();
 
             Console.SetCursorPosition(0, 0);
             gameField.Draw();
-
-            System.Threading.Thread.Sleep(200);
         }
 
         sceneNumber = 2;
