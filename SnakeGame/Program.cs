@@ -40,6 +40,7 @@ class SnakeGame
         } while (key != ConsoleKey.Spacebar);
 
         score = 0;
+        isGameOver = false;
         sceneNumber = 0;
         Console.Clear();
     }

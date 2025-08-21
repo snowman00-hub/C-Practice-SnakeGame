@@ -37,45 +37,8 @@ public class Snake
             GetFood();
         }
 
-        float waitingTime = 175f;
-        DateTime start = DateTime.Now;
-        while((DateTime.Now - start).TotalMilliseconds < waitingTime)
-        {
-            if (Console.KeyAvailable)
-            {
-                switch (Console.ReadKey().Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        moveDir = (0, -1);
-                        break;
-                    case ConsoleKey.RightArrow:
-                        moveDir = (1, 0);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        moveDir = (-1, 0);
-                        break;
-                    case ConsoleKey.DownArrow:
-                        moveDir = (0, 1);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        var head = pos[0];
-        tail = pos[pos.Count - 1];
-        for(int i = pos.Count - 1; i > 0;i--)
-        {
-            pos[i] = pos[i - 1];
-        }
-        head = (head.Item1 + moveDir.Item1, head.Item2 + moveDir.Item2);
-        pos[0] = head;
-
-        if(head == food.GetPos())
-        {
-            GetFood();
-        }
+        KeyInput();
+        Move();
     }
 
     public void GetFood()
@@ -83,5 +46,72 @@ public class Snake
         pos.Add(tail);
         food.ResetPos(pos);
         SnakeGame.score++;
+    }
+
+    public void Move()
+    {
+        var head = pos[0];
+        tail = pos[pos.Count - 1];
+        for (int i = pos.Count - 1; i > 0; i--)
+        {
+            pos[i] = pos[i - 1];
+        }
+        head = (head.Item1 + moveDir.Item1, head.Item2 + moveDir.Item2);
+        pos[0] = head;
+
+        if (head == food.GetPos())
+        {
+            GetFood();
+        }
+
+        if((head.Item1 is <= 0 or >= 21) ||
+            (head.Item2 is <= 0 or >= 21))
+        {
+            SnakeGame.isGameOver = true;
+            System.Threading.Thread.Sleep(300);
+        }
+
+        for(int i= 1;i< pos.Count;i++)
+        {
+            if(head == pos[i])
+            {
+                SnakeGame.isGameOver = true;
+                System.Threading.Thread.Sleep(300);
+                break;
+            }
+        }
+    }
+
+    public void KeyInput()
+    {
+        float waitingTime = 175f;
+        DateTime start = DateTime.Now;
+        while ((DateTime.Now - start).TotalMilliseconds < waitingTime)
+        {
+            if (Console.KeyAvailable)
+            {
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (moveDir != (0, 1))
+                            moveDir = (0, -1);
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (moveDir != (-1, 0))
+                            moveDir = (1, 0);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        if (moveDir != (1, 0))
+                            moveDir = (-1, 0);
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (moveDir != (0, -1))
+                            moveDir = (0, 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }
