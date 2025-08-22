@@ -84,6 +84,7 @@ public class Snake
 
     public void KeyInput()
     {
+        var pastMovedir = moveDir;
         float waitingTime = 175f;
         DateTime start = DateTime.Now;
         while ((DateTime.Now - start).TotalMilliseconds < waitingTime)
@@ -93,19 +94,19 @@ public class Snake
                 switch (Console.ReadKey().Key)
                 {
                     case ConsoleKey.UpArrow:
-                        if (moveDir != (0, 1))
+                        if (pastMovedir != (0, 1))
                             moveDir = (0, -1);
                         break;
                     case ConsoleKey.RightArrow:
-                        if (moveDir != (-1, 0))
+                        if (pastMovedir != (-1, 0))
                             moveDir = (1, 0);
                         break;
                     case ConsoleKey.LeftArrow:
-                        if (moveDir != (1, 0))
+                        if (pastMovedir != (1, 0))
                             moveDir = (-1, 0);
                         break;
                     case ConsoleKey.DownArrow:
-                        if (moveDir != (0, -1))
+                        if (pastMovedir != (0, -1))
                             moveDir = (0, 1);
                         break;
                     default:
